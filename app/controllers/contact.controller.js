@@ -8,16 +8,32 @@ exports.create = async (req, res, next) => {
     const contactService = new ContactService(MongoDB.client);
     const document = await contactService.create(req.body);
     return res.send(document);
-  } catch (err) {}
+  } catch (err) {
+    return next(new ApiError("An error occured while retrieving contacts"));
+  }
 };
 exports.findAll = async (req, res, next) => {
   try {
-    res.send({ message: "findAll handler" });
-  } catch (err) {}
+    let documents = [];
+    const { name } = req.query;
+    const contactService = new ContactService(MongoDB.client);
+
+    if (name) {
+      documents = await contactService.findByName(name);
+    } else {
+      documents = await contactService.find({});
+    }
+    res.send(documents);
+  } catch (err) {
+    return next(new ApiError("An error occured while retrieving contacts"));
+  }
 };
 exports.findOne = async (req, res, next) => {
   try {
-    res.send({ message: "findOne handler" });
+    const contactService = new ContactService(MongoDB.client);
+    const id = req.params.id;
+    const document = await contactService.findById(id);
+    res.send(document);
   } catch (err) {}
 };
 exports.update = async (req, res, next) => {

@@ -25,6 +25,20 @@ class ContactService {
     );
     return result.value;
   }
+  async find(filter) {
+    const cursor = await this.Contact.find(filter);
+    return await cursor.toArray();
+  }
+  async findByName(name) {
+    return await this.find({
+      name: { $regex: new RegExp(name), $options: "i" },
+    });
+  }
+  async findById(id) {
+    return await this.Contact.findOne({
+      _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+    });
+  }
 }
 
 module.exports = ContactService;
