@@ -57,13 +57,26 @@ exports.update = async (req, res, next) => {
 };
 exports.delete = async (req, res, next) => {
   try {
-    res.send({ message: "delete handler" });
-  } catch (err) {}
+    const contactService = new ContactService(MongoDB.client);
+    const document = await contactService.deleteOne(req.params.id);
+    if (!document)
+      return new ApiError(
+        404,
+        "Contact with id " + req.params.id + " cannot be found"
+      );
+    res.send({ message: "Document deleted" });
+  } catch (err) {
+    return next(new ApiError("An error occured while deleting contact"));
+  }
 };
 exports.deleteall = async (req, res, next) => {
   try {
-    res.send({ message: "deleteAll handler" });
-  } catch (err) {}
+    const contactService = new ContactService(MongoDB.client);
+    const result = await contactService.deleteAll();
+    res.send({ message: "All Contacts deleted" });
+  } catch (err) {
+    return next(new ApiError("An error occured while deleting all contacts"));
+  }
 };
 exports.findAllFavourites = async (req, res, next) => {
   try {

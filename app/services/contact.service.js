@@ -49,6 +49,16 @@ class ContactService {
     );
     return result;
   }
+  async deleteAll() {
+    const result = await this.Contact.deleteMany({});
+    return result;
+  }
+  async deleteOne(id) {
+    const result = await this.Contact.findOneAndDelete({
+      _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
+    });
+    return result;
+  }
 }
 
 module.exports = ContactService;
