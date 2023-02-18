@@ -9,4 +9,6 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to contact book" });
 });
 
+app.use("/api/contacts", require("./routes/contact.route"));
+
 module.exports = app;
