@@ -80,6 +80,9 @@ exports.deleteall = async (req, res, next) => {
 };
 exports.findAllFavourites = async (req, res, next) => {
   try {
-    res.send({ message: "findAllFavourites handler" });
+    const contactService = new ContactService(MongoDB.client);
+    console.log(1);
+    const document = await contactService.findAllFavorites();
+    res.send(document);
   } catch (err) {}
 };

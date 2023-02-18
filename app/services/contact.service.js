@@ -20,7 +20,7 @@ class ContactService {
     const contact = this.extractData(payload);
     const result = await this.Contact.findOneAndUpdate(
       payload,
-      { $set: { favorite: contact.favourite === true } },
+      { $set: { favourite: contact.favourite === true } },
       { returnDocument: "after", upsert: true }
     );
     return result.value;
@@ -38,6 +38,9 @@ class ContactService {
     return await this.Contact.findOne({
       _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
     });
+  }
+  async findAllFavorites() {
+    return await this.find({ favourite: true });
   }
   async update(id, payload) {
     const filter = { _id: ObjectId.isValid(id) ? new ObjectId(id) : null };
