@@ -1,6 +1,13 @@
+const ApiError = require("../api-error");
+const ContactService = require("../services/contact.service");
+const MongoDB = require("../utils/mongodb.util");
+
 exports.create = async (req, res, next) => {
+  if (!req.body?.name) next(new ApiError("Name không được trống"));
   try {
-    res.send({ message: "create handler" });
+    const contactService = new ContactService(MongoDB.client);
+    const document = await contactService.create(req.body);
+    return res.send(document);
   } catch (err) {}
 };
 exports.findAll = async (req, res, next) => {
